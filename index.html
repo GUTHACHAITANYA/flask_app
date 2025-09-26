@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>User Manager</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <script>
+        async function createUser() {
+            let name = document.getElementById("name").value;
+            let age = document.getElementById("age").value;
+
+            const response = await fetch("/users", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ name: name, age: age })
+            });
+
+            const data = await response.json();
+            alert(data.message);
+            location.reload();
+        }
+    </script>
+</head>
+<body>
+    <div class="container">
+        <h1>User Manager</h1>
+        
+        <h2>Add User</h2>
+        <input type="text" id="name" placeholder="Enter name">
+        <input type="number" id="age" placeholder="Enter age">
+        <button onclick="createUser()">Add User</button>
+
+        <h2>Users List</h2>
+        <ul>
+            {% for id, user in users.items() %}
+                <li><b>ID {{id}}:</b> {{user["name"]}} ({{user["age"]}} years old)</li>
+            {% else %}
+                <li>No users yet.</li>
+            {% endfor %}
+        </ul>
+    </div>
+</body>
+</html>
